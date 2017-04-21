@@ -1,31 +1,31 @@
 package main
 
 import (
-	"io"
-	"math/rand"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/PeterJausovec/goservice/movies"
+
+	"fmt"
+
+	"log"
 )
 
 func getMovies(w http.ResponseWriter, r *http.Request) {
-	movie, err := movies.GetMovieByID(randomID())
-	if err != nil {
-		io.WriteString(w, movie.Title)
-	}
+	randomID := movies.GetRandomID()
+	fmt.Fprintf(w, "Random ID: %s", randomID)
+	// movie, err := movies.GetMovieByID(randomID)
+	// if err != nil {
+	// 	fmt.Fprintf(w, movie.Title)
+	// } else {
+	// 	log.Println("HELLO!")
+	// 	fmt.Fprintf(w, err.Error())
+	// }
 }
 func main() {
 	http.HandleFunc("/api/movies", getMovies)
-	http.ListenAndServe(":5000", nil)
-}
-
-func randomID() string {
-	rand.Seed(time.Now().UnixNano())
-	res := "tt1"
-	for i := 0; i < 6; i++ {
-		res += strconv.Itoa(rand.Intn(9))
+	fmt.Println("Listening on 5000...")
+	err := http.ListenAndServe(":5000", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
 	}
-	return res
 }

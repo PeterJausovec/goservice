@@ -2,7 +2,10 @@ package movies
 
 import (
 	"encoding/json"
+	"math/rand"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 const (
@@ -38,12 +41,12 @@ type MovieData struct {
 
 // GetMovieByID makes a request to OMDB and returns a movie using the imdb ID.
 func GetMovieByID(imdbID string) (MovieData, error) {
-	resp, err := http.Get(omdbURL + imdbID)
+	url := omdbURL + imdbID
+	resp, err := http.Get(url)
 
 	if err != nil {
 		return MovieData{}, err
 	}
-
 	defer resp.Body.Close()
 	var m MovieData
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
@@ -51,4 +54,13 @@ func GetMovieByID(imdbID string) (MovieData, error) {
 	}
 
 	return m, nil
+}
+
+func GetRandomID() string {
+	rand.Seed(time.Now().UnixNano())
+	res := "tt1"
+	for i := 0; i < 6; i++ {
+		res += strconv.Itoa(rand.Intn(9))
+	}
+	return res
 }
