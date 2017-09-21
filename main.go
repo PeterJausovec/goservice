@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/PeterJausovec/goservice/movies"
+	"github.com/peterj/goservice/movies"
 
 	"fmt"
 
